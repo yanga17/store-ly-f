@@ -113,6 +113,8 @@ export const AssignOperatorModule: React.FunctionComponent<StartRunProps> = ({ c
         if (data?.operator) {
             assignOperator()
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data?.operator])
 
     return (

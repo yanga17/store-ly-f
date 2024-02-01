@@ -11,7 +11,7 @@ interface Products {
 
 type ExpectedData = Products[];
 
-export const productList = () => {
+export const ProductList = () => {
     const url = `api/v1/product/getproducts`;
     const { data, loading, error } = useQuery<ExpectedData>(url);
 
@@ -61,7 +61,7 @@ export const ViewProductsModule = () => {
     return (
         <div className="flex flex-col justify-start gap-2">
             <TableHeaderModule headers={headers} />
-            {productList()}
+            {ProductList()}
         </div>
     )
 }

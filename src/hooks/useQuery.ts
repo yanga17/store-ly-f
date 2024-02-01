@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios, { AxiosResponse, AxiosError } from 'axios';
 import { apiEndPoint } from '@/utils/colors';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 interface QueryResult<T> {
     data: T | null;

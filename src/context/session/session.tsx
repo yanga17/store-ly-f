@@ -32,7 +32,7 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
         if (user?.token === null || user?.userID === null) {
             router.push('/login')
         }
-    }, [user]);
+    }, [user, router]);
 
     const login = async (data: UserData) => {
         setUser(data);
