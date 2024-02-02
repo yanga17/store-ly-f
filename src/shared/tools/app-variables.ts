@@ -256,3 +256,11 @@ export const wmmColours = [
     'Blush - CK12026 - Blush / Teal',
     'Teal - MB7004264OTI'
 ];
+
+export const headers = [
+    {
+        id: 1,
+        name: 'products',
+        headers: ['Product ID', 'Product Image', 'Product Name', 'Action']
+    }
+]
