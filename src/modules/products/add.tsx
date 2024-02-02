@@ -43,16 +43,7 @@ export const AddProductsModule = () => {
 
     const { handleChange, inputValues, clearValues } = useInputHandler();
 
-    const uploadImage = async (e: any) => {
-        const useBase64 = (file: any) => {
-            return new Promise((resolve, reject) => {
-                const fileReader = new FileReader();
-                fileReader.readAsDataURL(file);
-                fileReader.onload = () => resolve(fileReader.result);
-                fileReader.onerror = error => reject(error);
-            });
-        };
-
+    const UploadImage = async (e: any) => {
         e.preventDefault();
         const file = e.target.files[0];
         const base64: any = await useBase64(file)
@@ -353,7 +344,7 @@ export const AddProductsModule = () => {
                                     </>
                             }
                         </div>
-                        {!data?.productImage && <input name='image' type="file" className="opacity-0" onChange={uploadImage} />}
+                        {!data?.productImage && <input name='image' type="file" className="opacity-0" onChange={UploadImage} />}
                         {data?.productImage && <X size={40} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.red} className={`lg:ease-in-out lg:duration-300 absolute top-2 right-2 cursor-pointer`} onClick={resetImage} />}
                     </label>
                     {errors.productImage && <span className="text-red text-sm">{errors.productImage[0]}</span>}

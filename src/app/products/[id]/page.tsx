@@ -1,7 +1,7 @@
 'use client'
 
 import { useInputHandler } from "@/hooks";
-import { Dropdown } from "@/shared";
+import { Dropdown, useBase64 } from "@/shared";
 import { wmmMachineNames } from "@/shared/tools/app-variables";
 import { apiEndPoint, colors } from "@/utils/colors"
 import axios from "axios"
@@ -27,16 +27,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
     const { handleChange, inputValues, clearValues } = useInputHandler();
 
-    const uploadImage = async (e: any) => {
-        const useBase64 = (file: any) => {
-            return new Promise((resolve, reject) => {
-                const fileReader = new FileReader();
-                fileReader.readAsDataURL(file);
-                fileReader.onload = () => resolve(fileReader.result);
-                fileReader.onerror = error => reject(error);
-            });
-        };
-
+    const UploadImage = async (e: any) => {
         e.preventDefault();
         const file = e.target.files[0];
         const base64: any = await useBase64(file)
@@ -355,7 +346,7 @@ export default function Page({ params }: { params: { id: string } }) {
                                     </>
                             }
                         </div>
-                        {!data?.productImage && <input name='image' type="file" className="opacity-0" onChange={uploadImage} />}
+                        {!data?.productImage && <input name='image' type="file" className="opacity-0" onChange={UploadImage} />}
                         {data?.productImage && <X size={40} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.red} className={`lg:ease-in-out lg:duration-300 absolute top-2 right-2 cursor-pointer`} onClick={resetImage} />}
                     </label>
                 </div>
