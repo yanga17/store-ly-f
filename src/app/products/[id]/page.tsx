@@ -1,36 +1,15 @@
 'use client'
 
 import { useInputHandler } from "@/hooks";
-import { Dropdown, useBase64 } from "@/shared";
+import { Dropdown } from "@/shared";
 import { wmmMachineNames } from "@/shared/tools/app-variables";
 import { apiEndPoint, colors } from "@/utils/colors"
 import axios from "axios"
-import { ImagePlus, X } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast"
-import Validator from "validatorjs";
-
-const rules = {
-    productName: 'required',
-    productCode: 'required',
-    testMachineName: 'required',
-    weight: 'required',
-    coolTime: 'required',
-    chargingTime: 'required',
-    targetTime: 'required',
-    cavity: 'required',
-    paletteConfig: 'required',
-    totalWeight: 'required',
-    masterBatch: 'required',
-    volume: 'required',
-    productImage: 'required',
-};
-
-interface Errors {
-    [key: string]: string[];
-}
 
 export default function Page({ params }: { params: { id: string } }) {
     const { id } = params
@@ -46,11 +25,18 @@ export default function Page({ params }: { params: { id: string } }) {
 
     const [product, setProduct] = useState()
 
-    const [errors, setErrors] = useState<Errors>({});
-
     const { handleChange, inputValues, clearValues } = useInputHandler();
 
     const uploadImage = async (e: any) => {
+        const useBase64 = (file: any) => {
+            return new Promise((resolve, reject) => {
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.onload = () => resolve(fileReader.result);
+                fileReader.onerror = error => reject(error);
+            });
+        };
+
         e.preventDefault();
         const file = e.target.files[0];
         const base64: any = await useBase64(file)
@@ -172,8 +158,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 router.push('/products')
             }
             else {
-                console.log(response)
-
                 setData({ ...data, isLoading: false })
 
                 toast('Failed to edit product, please re-try',

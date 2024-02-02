@@ -44,6 +44,15 @@ export const AddProductsModule = () => {
     const { handleChange, inputValues, clearValues } = useInputHandler();
 
     const uploadImage = async (e: any) => {
+        const useBase64 = (file: any) => {
+            return new Promise((resolve, reject) => {
+                const fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.onload = () => resolve(fileReader.result);
+                fileReader.onerror = error => reject(error);
+            });
+        };
+
         e.preventDefault();
         const file = e.target.files[0];
         const base64: any = await useBase64(file)
