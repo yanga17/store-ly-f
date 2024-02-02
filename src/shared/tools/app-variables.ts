@@ -257,10 +257,12 @@ export const wmmColours = [
     'Teal - MB7004264OTI'
 ];
 
-export const headers = [
+export const wmmHeaders = [
     {
         id: 1,
         name: 'products',
         headers: ['Product ID', 'Product Image', 'Product Name', 'Action']
     }
 ]
+
+export const wmmMachineNames = ['TMC', 'Chen Hsong', 'Dakumar', 'TMC', 'WellTec', 'Haitian', 'CMP', 'FS']

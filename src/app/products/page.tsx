@@ -1,19 +1,19 @@
 'use client'
 
-import { ViewProductsModule } from "@/modules/products"
+import { AddProductsModule, ViewProductsModule } from "@/modules/products"
 import { Tab, Tabs } from "@/shared/ui/tab";
 
 export default function Products() {
 
   const tabs: Tab[] = [
     {
+      label: 'Add Product',
+      content: <AddProductsModule />
+    },
+    {
       label: 'View Products',
       content: <ViewProductsModule />
     },
-    {
-      label: 'Add Product',
-      content: <div>Content of Tab 2</div>
-    }
   ];
 
   return (

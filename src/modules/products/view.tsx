@@ -7,7 +7,7 @@ import { colors } from '@/utils/colors';
 import { Eye, EyeOff, Pencil, Utensils } from 'lucide-react';
 import Link from 'next/link';
 import { TableHeaderModule } from '@/shared';
-import { headers } from '@/shared/tools/app-variables';
+import { wmmHeaders } from '@/shared/tools/app-variables';
 
 export const ViewProductsModule = () => {
     const [isExpanded, setIsExpanded] = useState(0)
@@ -16,12 +16,12 @@ export const ViewProductsModule = () => {
 
     const products = Products()
 
-    const loadingUI = new Array(30).fill(null);
-
     if (!products) {
+        const loadingUI = new Array(30).fill(null);
+
         return (
             <div className='flex flex-col justify-start gap-3'>
-                <TableHeaderModule headers={headers[0]?.headers} />
+                <TableHeaderModule headers={wmmHeaders[0]?.headers} />
                 {loadingUI?.map((index) =>
                     <div className="flex items-center justify-between bg-white p-2 rounded divide-x divide-greyMid" key={index}>
                         <div className="rounded bg-grey-darker animate-pulse py-3 w-[23%] mx-auto" />
@@ -36,7 +36,7 @@ export const ViewProductsModule = () => {
 
     return (
         <div className='w-full h-screen flex flex-col justify-start gap-3 overflow-y-scroll pb-16'>
-            <TableHeaderModule headers={headers[0]?.headers} />
+            <TableHeaderModule headers={wmmHeaders[0]?.headers} />
             <div className='w-full h-full pb-30 overflow-y-scroll flex flex-col justify-start gap-2 pr-1 pb-30'>
                 {products?.map(({ image, uid, product_name }, index) =>
                     <div className={`ease-in-out duration-500 bg-white rounded w-full flex flex-col justify-start gap-2 border-2 ${isExpanded === Number(uid) && 'border-green'}`} key={index}>

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import { colors } from '@/utils/colors';
 import { useInputHandler } from '@/hooks';
 import { ArrowUp, SearchIcon, CircleUserRound, Moon, Sun, Utensils } from 'lucide-react';
@@ -49,8 +49,8 @@ export const Dropdown: React.FunctionComponent<DropdownProps> = ({ options, onSe
                 <ArrowUp size={20} strokeWidth={2} absoluteStrokeWidth color={colors[0]?.black} className={`lg:ease-in-out lg:duration-300 ${isOpen && 'rotate-180'}`} />
             </button>
             {isOpen && (
-                <div className="bg-white rounded shadow-lg w-full top-14 z-9 flex flex-col gap-2 h-56 overflow-y-scroll pr-1" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex={-1}>
-                    <form className='flex items-center justify-between relative'>
+                <div className="bg-white rounded shadow-lg w-full top-14 z-9 flex flex-col gap-2 h-56 overflow-y-scroll p-2" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex={-1}>
+                    <form className='flex items-center justify-between relative w-full'>
                         <input
                             className='p-2 border border-green w-full rounded placeholder:italic placeholder:text-sm placeholder:font-normal cursor-pointer outline-none text-sm text-gray-500'
                             type='text'
@@ -66,7 +66,7 @@ export const Dropdown: React.FunctionComponent<DropdownProps> = ({ options, onSe
                     <div className="flex flex-col justify-start gap-2" role="none">
                         {dropDownOptions.map(option => (
                             <div
-                                className="py-2 px-1 hover:bg-grey first:rounded-t last:rounded-b ease-in-out duration-300 cursor-pointer flex items-center justify-start gap-1"
+                                className="py-2 px-1 hover:bg-grey  ease-in-out duration-300 cursor-pointer flex items-center justify-start gap-1"
                                 key={option.id}
                                 onClick={() => handleSelect(option)}>
                                 {option.photoURL === 'userIcon' ? <CircleUserRound size={30} strokeWidth={2} absoluteStrokeWidth color={colors[0]?.blackLight} className={`lg:ease-in-out lg:duration-300`} />

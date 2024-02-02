@@ -13,6 +13,7 @@
         "getteamleader",
         "insertinjection",
         "insertlog",
+        "insertproduct",
         "lucide",
         "pmachines",
         "pproducts",
