@@ -7,13 +7,13 @@ export default function Products() {
 
   const tabs: Tab[] = [
     {
-      label: 'Add Product',
-      content: <AddProductsModule />
-    },
-    {
       label: 'View Products',
       content: <ViewProductsModule />
     },
+    {
+      label: 'Add Product',
+      content: <AddProductsModule />
+    }
   ];
 
   return (
