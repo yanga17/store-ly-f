@@ -103,7 +103,7 @@ export const AddProductsModule = () => {
             const payLoad = {
                 product_code: inputValues?.productCode,
                 product_name: inputValues?.productName,
-                test_run_machine: inputValues?.testMachineName,
+                test_run_machine: data?.testMachineName,
                 weight: inputValues?.weight,
                 cool_time: inputValues?.coolTime,
                 charging_time: inputValues?.chargingTime,

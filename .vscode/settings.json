@@ -8,6 +8,7 @@
         "etproducts",
         "getalltempmachines",
         "getoperator",
+        "getproductinfo",
         "getproductionview",
         "getproducts",
         "getteamleader",
@@ -22,6 +23,7 @@
         "updateinjection",
         "updateinjectiontemp",
         "updateoperator",
+        "updateproduct",
         "validatorjs",
         "Visisble",
         "wmmlog"
