@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 type UserData = {
-    userID: string | null;
-    token: string | null;
-    accessLevel: string | null;
+    id: string | null,
+    emp_id: string | null;
+    emp_name: string | null;
+    emp_surname: string | null;
 };
 
 export const UserSessionContext = createContext<{
@@ -22,14 +23,14 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
         if (typeof window !== 'undefined') {
             const storedData = sessionStorage.getItem(`wmmSession`);
 
-            return storedData ? JSON.parse(storedData) : { userID: null, serverIndex: 1, token: null, accessLevel: null }
+            return storedData ? JSON.parse(storedData) : { emp_id: null, serverIndex: 1, id: null, accessLevel: null }
         }
     });
 
     const router = useRouter();
 
     useEffect(() => {
-        if (user?.token === null || user?.userID === null) {
+        if (user?.id === null || user?.emp_id === null) {
             router.push('/login')
         }
     }, [user, router]);

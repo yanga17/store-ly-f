@@ -13,6 +13,7 @@
         "getproductionview",
         "getproducts",
         "getteamleader",
+        "insertcheckin",
         "insertinjection",
         "insertlog",
         "insertproduct",
