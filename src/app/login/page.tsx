@@ -1,13 +1,13 @@
 'use client'
 
-import axios from 'axios'
+import axios from 'axios';
 import { useState } from 'react';
-import { apiEndPoint, colors } from '@/utils/colors';
-import { Eye, EyeOff } from 'lucide-react';
-import { useForm, Controller } from 'react-hook-form';
 import { useSession } from '@/context';
-import { useInputHandler } from '@/hooks';
 import { toast } from 'react-hot-toast';
+import { useInputHandler } from '@/hooks';
+import { Eye, EyeOff } from 'lucide-react';
+import { apiEndPoint, colors } from '@/utils/colors';
+import { useForm, Controller } from 'react-hook-form';
 
 interface FormData {
     username: string;
@@ -28,21 +28,22 @@ export default function Page() {
     const renderIcon = () => {
         if (isVisisble) {
             return (
-                <button className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
+                <span className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
                     <Eye size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.purple} />
-                </button>
+                </span>
             )
         }
         else {
             return (
-                <button className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
-                    <EyeOff size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.purple} className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility} />
-                </button>
+                <span className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
+                    <EyeOff size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.purple} onClick={toggleVisibility} />
+                </span>
             )
         }
     }
 
-    const onSubmit = async (data: FormData) => {
+    const onSubmit = async (data: FormData, e: any) => {
+        e.preventDefault();
         setIsLoading(true);
 
         try {
@@ -51,14 +52,17 @@ export default function Page() {
                 password: data.password
             }
 
-            const url = `api/v1/user/login`
+            const url = `user/login`
 
             const response = await axios.post(`${apiEndPoint}/${url}`, payLoad)
 
             if (response.data.msg === "Success, Logged in!") {
                 login(response?.data)
+                setIsLoading(false);
             }
             else {
+                setIsLoading(false);
+
                 toast('Login failed, please try again', {
                     icon: '❌',
                     style: {
@@ -72,6 +76,8 @@ export default function Page() {
 
         }
         catch {
+            setIsLoading(false);
+
             toast('Login failed, please try again', {
                 icon: '❌',
                 style: {
@@ -86,7 +92,7 @@ export default function Page() {
 
     return (
         <div className="w-full h-screen flex items-center justify-center overflow-hidden">
-            <div className="w-full  md:w-5/12 lg:w-4/12 shadow-lg p-2 md:p-4 flex flex-col justify-start items-center gap-5 rounded bg-white">
+            <div className="w-full  md:w-5/12 lg:w-3/12 xl:w-4/12 shadow-lg p-2 md:p-4 flex flex-col justify-start items-center gap-5 rounded bg-white">
                 <div className="flex flex-col items-center justify-center gap-0">
                     <h1 className="leading-none font-medium">Welcome</h1>
                     <p className="text-sm">Please enter your credentials to sign in</p>
@@ -103,7 +109,7 @@ export default function Page() {
                                     {...field}
                                     className="border-grey p-3 w-full border rounded outline-none md:cursor-pointer placeholder:text-sm placeholder:italic"
                                     type="text"
-                                    placeholder="george@otima.co.za"
+                                    placeholder="jack@developer.co.za"
                                     onChange={(e) => {
                                         handleChange('username', e.target.value);
                                         field.onChange(e);
@@ -115,7 +121,7 @@ export default function Page() {
                     </div>
                     <div className="relative flex flex-col justify-start items-start gap-1">
                         <label>Password</label>
-                        <div className='flex items-center justify-between w-full'>
+                        <div className='flex items-center justify-between w-full bg-'>
                             <Controller
                                 control={control}
                                 name="password"

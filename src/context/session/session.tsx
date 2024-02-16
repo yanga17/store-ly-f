@@ -37,7 +37,7 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
     const login = async (data: UserData) => {
         setUser(data);
 
-        toast(`Welcome to WMM`,
+        toast(`Welcome`,
             {
                 icon: '👋',
                 style: {

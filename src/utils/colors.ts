@@ -1,5 +1,4 @@
-export const colors = [
-    {
+export const colors = {
         white: '#ffffff',
         black: '#353535',
         mask: "#0000007f",
@@ -21,7 +20,6 @@ export const colors = [
         overlay: '#0000007f',
         darkblue: '#0038FF',
     }
-]
 
 
-export const apiEndPoint = process.env.REST_ENDPOINT || `https://wmm-backend.vercel.app` 
+export const apiEndPoint = process.env.REST_ENDPOINT || `https://internal-checkin-backend.vercel.app` 
