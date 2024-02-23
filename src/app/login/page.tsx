@@ -29,14 +29,14 @@ export default function Page() {
         if (isVisisble) {
             return (
                 <span className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
-                    <Eye size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.purple} />
+                    <Eye size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors?.purple} />
                 </span>
             )
         }
         else {
             return (
                 <span className='absolute right-3 md:cursor-pointer' onClick={toggleVisibility}>
-                    <EyeOff size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors[0]?.purple} onClick={toggleVisibility} />
+                    <EyeOff size={25} strokeWidth={1.5} absoluteStrokeWidth color={colors?.purple} onClick={toggleVisibility} />
                 </span>
             )
         }

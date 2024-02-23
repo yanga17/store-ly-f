@@ -23,7 +23,7 @@ export const DateTimePicker = () => {
         <div className='w-full cursor-pointer flex flex-col justify-start gap-2 mt-1'>
             <p className='flex items-center justify-between w-full p-[14px] rounded border' onClick={toggleDropdown}>
                 <span className='text-gray-500 text-sm font-medium'> Select A Date</span>
-                <ArrowUp size={20} strokeWidth={2} absoluteStrokeWidth color={colors[0]?.black} className={`lg:ease-in-out lg:duration-300 ${isOpen && 'rotate-180'}`} />
+                <ArrowUp size={20} strokeWidth={2} absoluteStrokeWidth color={colors?.black} className={`lg:ease-in-out lg:duration-300 ${isOpen && 'rotate-180'}`} />
             </p>
             {isOpen &&
                 <DayPicker
