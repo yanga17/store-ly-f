@@ -30,30 +30,30 @@ export const AttendanceModule = () => {
                 {
                     [...Array(500)].map((_, index) =>
                         <div key={index} className="flex items-center justify-between divide-x divide-gray-500 w-full bg-white text-black p-2 rounded">
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4 hidden lg:block'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className="w-1/4 flex items-center justify-center gap-2">
+                            <div className="w-1/3 lg:w-1/4 flex items-center justify-center gap-2">
                                 <button
                                     disabled
-                                    className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
-                                    <span>Confirm</span>
-                                    <CheckCheck />
+                                    className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-2 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
+                                    <span className='hidden lg:flex'>Confirm</span>
+                                    <Check />
                                 </button>
                                 <button
                                     disabled
-                                    className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
-                                    <span>Decline</span>
+                                    className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-2 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
+                                    <span className='hidden lg:flex'>Decline</span>
                                     <X />
                                 </button>
-                            </div>
-                        </div>
+                            </div >
+                        </div >
                     )}
             </>
         )
@@ -65,30 +65,30 @@ export const AttendanceModule = () => {
                 {
                     [...Array(500)].map((_, index) =>
                         <div key={index} className="flex items-center justify-between divide-x divide-gray-500 w-full bg-white text-black p-2 rounded">
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4 hidden lg:block'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className="w-1/4 flex items-center justify-center gap-2">
+                            <div className="w-1/3 lg:w-1/4 flex items-center justify-center gap-2">
                                 <button
                                     disabled
-                                    className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
-                                    <span>Confirm</span>
-                                    <CheckCheck />
+                                    className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-2 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
+                                    <span className='hidden lg:flex'>Confirm</span>
+                                    <Check />
                                 </button>
                                 <button
                                     disabled
-                                    className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
-                                    <span>Decline</span>
+                                    className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-2 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
+                                    <span className='hidden lg:flex'>Decline</span>
                                     <X />
                                 </button>
-                            </div>
-                        </div>
+                            </div >
+                        </div >
                     )}
             </>
         )
@@ -100,30 +100,30 @@ export const AttendanceModule = () => {
                 {
                     [...Array(500)].map((_, index) =>
                         <div key={index} className="flex items-center justify-between divide-x divide-gray-500 w-full bg-white text-black p-2 rounded">
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className='w-1/4'>
+                            <div className='w-1/3 lg:w-1/4 hidden lg:block'>
                                 <p className='bg-black-light animate-pulse py-4 w-11/12 mx-auto rounded'></p>
                             </div>
-                            <div className="w-1/4 flex items-center justify-center gap-2">
+                            <div className="w-1/3 lg:w-1/4 flex items-center justify-center gap-2">
                                 <button
                                     disabled
-                                    className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
-                                    <span>Confirm</span>
-                                    <CheckCheck />
+                                    className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-2 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
+                                    <span className='hidden lg:flex'>Confirm</span>
+                                    <Check />
                                 </button>
                                 <button
                                     disabled
-                                    className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
-                                    <span>Decline</span>
+                                    className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-2 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1">
+                                    <span className='hidden lg:flex'>Decline</span>
                                     <X />
                                 </button>
-                            </div>
-                        </div>
+                            </div >
+                        </div >
                     )}
             </>
         )

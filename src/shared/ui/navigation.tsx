@@ -21,7 +21,7 @@ export const Navigation = () => {
     return (
       <div className={`lg:hidden flex relative p-4 ${pathname === '/' ? 'bg-white text-black' : 'bg-black text-white'}`}>
         <div className="w-full items-center justify-between flex">
-          <p className="uppercase font-medium text-sm">Train Log</p>
+          <p className="uppercase font-medium text-sm">TrainLog</p>
           <LayoutDashboard size={25} strokeWidth={1.5} color={pathname === '/' ? colors?.black : colors?.white} className="cursor-pointer" onClick={toggleVisibility} />
         </div>
         {isOpen &&
@@ -39,6 +39,7 @@ export const Navigation = () => {
                   <button className="text-sm font-medium uppercase rounded bg-red text-white w-full py-2 px-10" onClick={logout}>Logout</button>
                 </li>
               </ul>
+              <p className="absolute uppercase text-xs w-full text-center bottom-2">Powered by <Link target='__blank' href='https://www.legendsystems.co.za/' className="text-purple">Legend Systems</Link></p>
             </div>
           </div>
         }

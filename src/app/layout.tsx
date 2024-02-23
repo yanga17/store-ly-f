@@ -9,7 +9,7 @@ import { SessionProvider } from "@/context";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Attend Track",
+  title: "TRAINLOG",
   description: "Track in-house training attendance",
 };
 
