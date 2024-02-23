@@ -2,7 +2,7 @@
 
 import { isEmpty } from 'lodash';
 import { useQuery } from "@/hooks/useQuery";
-import { CheckCheck, X } from "lucide-react";
+import { Check, CheckCheck, X } from "lucide-react";
 import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -133,7 +133,7 @@ export const AttendanceModule = () => {
         uid: property?.uid,
         userName: property.emp_name,
         userSurname: property.emp_surname,
-        checkInTime: property.checkin_time?.slice(0, 19)?.replace('T', ' '),
+        checkInTime: property.checkin_time?.slice(10, 19)?.replace('T', ' '),
         status: property.ischecked
     }))
 
@@ -173,20 +173,20 @@ export const AttendanceModule = () => {
             {
                 checkInLog?.map(({ uid, userName, userSurname, checkInTime, status }) =>
                     <div key={uid} className="flex items-center justify-between divide-x divide-gray-500 w-full bg-white text-black p-2 rounded overflow-hidden">
-                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/4 text-center`}>{userName}</p>
-                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/4 text-center`}>{userSurname}</p>
-                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/4 text-center`}>{checkInTime}</p>
-                        <div className="w-1/4 flex items-center justify-center gap-2">
+                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center`}>{userName}</p>
+                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center hidden lg:block`}>{userSurname}</p>
+                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center`}>{checkInTime}</p>
+                        <div className="w-1/3 lg:w-1/4 flex flex-col lg:flex-row items-center justify-center gap-2">
                             {status === 0 ?
                                 <>
                                     <button className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
                                         onClick={() => resolveAttendee({ action: 1, uid })}>
-                                        <span>Confirm</span>
-                                        <CheckCheck />
+                                        <span className='hidden lg:flex'>Confirm</span>
+                                        <Check />
                                     </button>
                                     <button className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
                                         onClick={() => resolveAttendee({ action: 0, uid })}>
-                                        <span>Decline</span>
+                                        <span className='hidden lg:flex'>Decline</span>
                                         <X />
                                     </button>
                                 </>

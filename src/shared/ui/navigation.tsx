@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSession } from "@/context";
 import { colors } from "@/utils/colors";
 import { usePathname } from 'next/navigation';
-import { CalendarClock, LayoutDashboard, LogOut, X } from "lucide-react";
+import { CalendarClock, LayoutDashboard, X } from "lucide-react";
 import { useState } from "react";
 
 export const Navigation = () => {
@@ -54,7 +54,7 @@ export const Navigation = () => {
             role === 'Admin' &&
             <li className="m-0 p-2 flex items-center justify-start gap-1 uppercase cursor-pointer hover:bg-white ease-in-out duration-500 rounded group w-11/12 mx-auto">
               <LayoutDashboard size={25} strokeWidth={1} color={pathname === '/' ? colors?.purple : colors?.white} />
-              <Link href='/' className="text-sm font-medium text-white group-hover:text-purple">Home</Link>
+              <Link href='/' className="text-sm font-medium text-white group-hover:text-purple" >Home</Link>
             </li>
           }
           <li className="m-0 p-2 flex items-center justify-start gap-1 uppercase cursor-pointer hover:bg-white ease-in-out duration-500 rounded group w-11/12 mx-auto">
