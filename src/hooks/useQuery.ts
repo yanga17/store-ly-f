@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react';
 import { apiEndPoint } from '@/utils/colors';
 import axios, { AxiosResponse, AxiosError } from 'axios';
@@ -9,8 +11,6 @@ interface QueryResult<T> {
 }
 
 export const useQuery = <T>(url: string): QueryResult<T> => {
-
-
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<AxiosError<T> | null>(null);
@@ -20,7 +20,6 @@ export const useQuery = <T>(url: string): QueryResult<T> => {
         const queryData = async () => {
             try {
                 const response: AxiosResponse<T> = await axios.get(`${apiEndPoint}/${url}`);
-
                 setData(response.data);
                 setError(null);
             }
@@ -34,7 +33,7 @@ export const useQuery = <T>(url: string): QueryResult<T> => {
             }
         };
 
-        queryData()
+        queryData();
 
         const intervalId = setInterval(queryData, 2500);
 

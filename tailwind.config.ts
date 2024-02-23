@@ -38,6 +38,7 @@ const config: Config = {
         'purple-faint': '#dccfff',
         'black-light': 'rgb(87, 87, 86, 0.8)',
         "black-glass": "rgb(18, 18, 18, 0.8)",
+        "black-dark": "#000000",
       }
     },
   },

@@ -36,9 +36,26 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
     }, [user, router]);
 
     const login = async (data: UserData) => {
+        if (!data) {
+            toast(`Login Failed`,
+                {
+                    icon: '❌',
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                }
+            );
+
+            router.push("/");
+
+            return;
+        }
+
         setUser(data);
 
-        toast(`Welcome`,
+        toast(`Welcome ${data?.emp_name}`,
             {
                 icon: '👋',
                 style: {
@@ -48,6 +65,8 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
                 },
             }
         );
+
+        console.log(data, 'start access control')
 
         router.push("/");
     };

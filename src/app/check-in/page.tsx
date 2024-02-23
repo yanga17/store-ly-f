@@ -72,7 +72,7 @@ export default function Checkin() {
     }
 
     return (
-        <section className="w-full h-full flex flex-col items-center justify-center gap-2">
+        <section className="w-full h-full flex flex-col items-center justify-center gap-2 bg-black">
             <button className="bg-green text-white px-10 py-4 lg:py-10 rounded uppercase" onClick={checkinUser}>Check In Now</button>
         </section>
     );
