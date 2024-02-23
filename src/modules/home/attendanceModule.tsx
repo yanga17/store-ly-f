@@ -129,8 +129,6 @@ export const AttendanceModule = () => {
         )
     };
 
-    console.log(data)
-
     const checkInLog = data?.map((property) => ({
         uid: property?.uid,
         userName: property.emp_name,

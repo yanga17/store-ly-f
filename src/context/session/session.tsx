@@ -9,6 +9,7 @@ type UserData = {
     emp_id: string | null;
     emp_name: string | null;
     emp_surname: string | null;
+    role: string | null;
 };
 
 export const UserSessionContext = createContext<{
@@ -21,7 +22,7 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
     const [user, setUser] = useState<UserData>(() => {
 
         if (typeof window !== 'undefined') {
-            const storedData = sessionStorage.getItem(`wmmSession`);
+            const storedData = sessionStorage.getItem(`trainLog`);
 
             return storedData ? JSON.parse(storedData) : { emp_id: null, serverIndex: 1, id: null, accessLevel: null }
         }
@@ -66,15 +67,15 @@ export const SessionProvider: React.FunctionComponent<{ children: ReactNode }> =
             }
         );
 
-        console.log(data, 'start access control')
+        const path = data?.role === 'Admin' ? '/' : '/check-in'
 
-        router.push("/");
+        router.push(path);
     };
 
-    useEffect(() => { sessionStorage.setItem(`wmmSession`, JSON.stringify(user)) }, [user]);
+    useEffect(() => { sessionStorage.setItem(`trainLog`, JSON.stringify(user)) }, [user]);
 
     const logout = () => {
-        sessionStorage.removeItem(`wmmSession`);
+        sessionStorage.removeItem(`trainLog`);
 
         router.push("/login");
 

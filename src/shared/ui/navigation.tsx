@@ -8,6 +8,7 @@ import { CalendarClock, LayoutDashboard, LogOut, X } from "lucide-react";
 import { useState } from "react";
 
 export const Navigation = () => {
+  const { user } = useSession()
   const pathname = usePathname();
   const { logout } = useSession();
 
@@ -41,25 +42,34 @@ export const Navigation = () => {
   }
 
   const DesktopNavigation = () => {
+    if (!user) {
+      return;
+    }
+    const { role } = user
+
     return (
       <div className="hidden lg:flex flex-col justify-between gap-1 h-full w-full bg-black-dark rounded py-4">
         <ul className="flex flex-col justify-between gap-2 w-full">
-          <li className="m-0 p-2 flex items-center justify-start gap-1 uppercase cursor-pointer hover:bg-white ease-in-out duration-500 rounded group w-11/12 mx-auto">
-            <LayoutDashboard size={25} strokeWidth={1} color={pathname === '/' ? colors?.purple : colors?.white} />
-            <Link href='/' className="text-sm font-medium text-white group-hover:text-purple">Home</Link>
-          </li>
+          {
+            role === 'Admin' &&
+            <li className="m-0 p-2 flex items-center justify-start gap-1 uppercase cursor-pointer hover:bg-white ease-in-out duration-500 rounded group w-11/12 mx-auto">
+              <LayoutDashboard size={25} strokeWidth={1} color={pathname === '/' ? colors?.purple : colors?.white} />
+              <Link href='/' className="text-sm font-medium text-white group-hover:text-purple">Home</Link>
+            </li>
+          }
           <li className="m-0 p-2 flex items-center justify-start gap-1 uppercase cursor-pointer hover:bg-white ease-in-out duration-500 rounded group w-11/12 mx-auto">
             <CalendarClock size={25} strokeWidth={1} color={pathname === '/check-in' ? colors?.purple : colors?.white} />
             <Link href='/check-in' className="text-sm font-medium text-white group-hover:text-purple">Attend</Link>
           </li>
         </ul>
-        <button className="gap-2 flex items-center justify-center w-10/12 mx-auto rounded p-1 bg-red text-white" onClick={logout}>
-          <LogOut size={30} strokeWidth={1} color={colors?.white} />
-          <span className="text-white font-medium uppercase text-sm">Logout</span>
+        <button className="gap-2 flex items-center justify-center w-10/12 mx-auto rounded p-2 bg-red text-white" onClick={logout}>
+          <span className="text-white font-medium uppercase text-xs">Logout</span>
         </button>
       </div>
     )
   }
+
+  console.log(user)
 
   return (
     <>
