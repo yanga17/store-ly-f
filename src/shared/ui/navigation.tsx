@@ -1,40 +1,45 @@
 'use client'
 
 import Link from "next/link";
+import { useState } from "react";
 import { useSession } from "@/context";
 import { colors } from "@/utils/colors";
 import { usePathname } from 'next/navigation';
 import { CalendarClock, LayoutDashboard, X } from "lucide-react";
-import { useState } from "react";
 
 export const Navigation = () => {
-  const { user } = useSession()
+  const { user } = useSession();
   const pathname = usePathname();
+
   const { logout } = useSession();
 
   const MobileNavigation = () => {
-    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const toggleVisibility = () => setIsOpen(!isOpen)
+    const toggleVisibility = () => setIsOpen(!isOpen);
 
     return (
-      <div className="lg:hidden flex relative p-4 bg-black text-white">
+      <div className={`lg:hidden flex relative p-4 ${pathname === '/' ? 'bg-white text-black' : 'bg-black text-white'}`}>
         <div className="w-full items-center justify-between flex">
           <p className="uppercase font-medium text-sm">Train Log</p>
-          <LayoutDashboard size={25} strokeWidth={1.5} color={colors?.white} className="cursor-pointer" onClick={toggleVisibility} />
+          <LayoutDashboard size={25} strokeWidth={1.5} color={pathname === '/' ? colors?.black : colors?.white} className="cursor-pointer" onClick={toggleVisibility} />
         </div>
-        {
-          isOpen &&
-          <div className="text-white bg-black-dark absolute top-40 left-0 bottom-0 right-0 w-11/12 mx-auto h-[500px] rounded">
-            <X size={40} strokeWidth={1.5} color={colors?.red} className="cursor-pointer absolute top-2 right-2" onClick={toggleVisibility} />
-            <ul className="w-full h-full flex flex-col items-center justify-center gap-2">
-              <li>
-                <Link href='/'>Home</Link>
-              </li>
-              <li>
-                <Link href='/check-in'>Attend</Link>
-              </li>
-            </ul>
+        {isOpen &&
+          <div className="absolute top-0 left-0 bottom-0 right-0 w-full bg-black-light mx-auto h-screen flex items-center justify-center">
+            <div className="text-white bg-black-dark rounded w-11/12 h-1/2 relative">
+              <X size={40} strokeWidth={1.5} color={colors?.red} className="cursor-pointer absolute top-2 right-2" onClick={toggleVisibility} />
+              <ul className="w-full h-full flex flex-col items-center justify-center gap-4">
+                <li>
+                  <Link href='/'>Home</Link>
+                </li>
+                <li>
+                  <Link href='/check-in'>Attend</Link>
+                </li>
+                <li>
+                  <button className="text-sm font-medium uppercase rounded bg-red text-white w-full py-2 px-10" onClick={logout}>Logout</button>
+                </li>
+              </ul>
+            </div>
           </div>
         }
       </div>
@@ -68,8 +73,6 @@ export const Navigation = () => {
       </div>
     )
   }
-
-  console.log(user)
 
   return (
     <>

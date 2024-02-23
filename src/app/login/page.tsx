@@ -8,7 +8,6 @@ import { useInputHandler } from '@/hooks';
 import { Eye, EyeOff } from 'lucide-react';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { useForm, Controller } from 'react-hook-form';
-import Link from 'next/link';
 
 interface FormData {
     username: string;
@@ -92,8 +91,8 @@ export default function Page() {
     };
 
     return (
-        <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-black relative">
-            <div className="w-11/12 md:w-5/12 lg:w-3/12 xl:w-4/12 shadow-lg p-2 md:p-4 flex flex-col justify-start items-center gap-5 rounded bg-white">
+        <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-login bg-cover bg-no-repeat bg-center">
+            <div className="w-11/12 md:w-5/12 lg:w-3/12 xl:w-4/12 shadow-lg p-2 md:p-4 flex flex-col justify-start items-center gap-5 rounded bg-white bg-opacity-50 backdrop-blur-md">
                 <div className="flex flex-col items-center justify-center gap-0">
                     <h1 className="leading-none font-medium">Welcome</h1>
                     <p className="text-sm">Please enter your credentials to sign in</p>
@@ -145,9 +144,8 @@ export default function Page() {
                         {formState.errors.password && <span className="text-red text-sm">{formState.errors.password.message}</span>}
                     </div>
                 </form>
-                <button className='w-full p-2 rounded bg-purple text-white uppercase' onClick={handleSubmit(onSubmit)}>{isLoading ? 'Signin in...' : 'Sign in'}</button>
+                <button className='w-full p-2 rounded bg-purple text-white uppercase' onClick={handleSubmit(onSubmit)} disabled={isLoading}>{isLoading ? 'Signin in...' : 'Sign in'}</button>
             </div>
-            <p className='absolute bottom-2 text-white uppercase text-sm font-medium'>Powered by <Link href='/' className='text-purple'>Legend Systems</Link></p>
         </div>
     );
 }

@@ -160,42 +160,60 @@ export const AttendanceModule = () => {
                     }
                 );
             }
-            else { }
+            else {
+                toast(`Failed to resolve attendee status`,
+                    {
+                        icon: '❌',
+                        style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                        },
+                    }
+                );
+            }
         }
-        catch (error) {
-            //handle errors
-            console.log(error)
+        catch (error: any) {
+            toast(`${error?.message}, please re-try`,
+                {
+                    icon: '❌',
+                    style: {
+                        borderRadius: '10px',
+                        background: '#333',
+                        color: '#fff',
+                    },
+                }
+            );
         }
     }
 
     return (
         <>
-            {
-                checkInLog?.map(({ uid, userName, userSurname, checkInTime, status }) =>
-                    <div key={uid} className="flex items-center justify-between divide-x divide-gray-500 w-full bg-white text-black p-2 rounded overflow-hidden">
-                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center`}>{userName}</p>
-                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center hidden lg:block`}>{userSurname}</p>
-                        <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center`}>{checkInTime}</p>
-                        <div className="w-1/3 lg:w-1/4 flex flex-col lg:flex-row items-center justify-center gap-2">
-                            {status === 0 ?
-                                <>
-                                    <button className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
-                                        onClick={() => resolveAttendee({ action: 1, uid })}>
-                                        <span className='hidden lg:flex'>Confirm</span>
-                                        <Check />
-                                    </button>
-                                    <button className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
-                                        onClick={() => resolveAttendee({ action: 0, uid })}>
-                                        <span className='hidden lg:flex'>Decline</span>
-                                        <X />
-                                    </button>
-                                </>
-                                :
-                                <CheckCheck size={30} color={colors?.green} />
-                            }
-                        </div>
+            {checkInLog?.map(({ uid, userName, userSurname, checkInTime, status }) =>
+                <div key={uid} className="flex items-center justify-between divide-x divide-gray-500 w-full bg-white text-black p-2 rounded overflow-hidden">
+                    <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center`}>{userName}</p>
+                    <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center hidden lg:block`}>{userSurname}</p>
+                    <p className={`text-sm uppercase text-gray-500 font-medium w-1/3 lg:w-1/4 text-center`}>{checkInTime}</p>
+                    <div className="w-1/3 lg:w-1/4 flex flex-col lg:flex-row items-center justify-center gap-2">
+                        {status === 0 ?
+                            <>
+                                <button className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-4 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
+                                    onClick={() => resolveAttendee({ action: 1, uid })}>
+                                    <span className='hidden lg:flex'>Confirm</span>
+                                    <Check />
+                                </button>
+                                <button className="bg-red hover:bg-white hover:text-red border border-red ease-in-out duration-300 text-white cursor-pointer px-4 lg:px-6 py-1 lg:py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
+                                    onClick={() => resolveAttendee({ action: 0, uid })}>
+                                    <span className='hidden lg:flex'>Decline</span>
+                                    <X />
+                                </button>
+                            </>
+                            :
+                            <CheckCheck size={30} color={colors?.green} />
+                        }
                     </div>
-                )}
+                </div>
+            )}
         </>
     )
 }

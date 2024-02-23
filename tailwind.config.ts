@@ -39,6 +39,9 @@ const config: Config = {
         'black-light': 'rgb(87, 87, 86, 0.8)',
         "black-glass": "rgb(18, 18, 18, 0.8)",
         "black-dark": "#000000",
+      },
+      backgroundImage: {
+        'login': "url('/covers/cover.webp')",
       }
     },
   },
