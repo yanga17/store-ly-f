@@ -129,12 +129,14 @@ export const AttendanceModule = () => {
         )
     };
 
+    console.log(data)
+
     const checkInLog = data?.map((property) => ({
         uid: property?.uid,
         userName: property.emp_name,
         userSurname: property.emp_surname,
         checkInTime: property.checkin_time?.slice(0, 19)?.replace('T', ' '),
-        status: property.checkin_status
+        status: property.ischecked
     }))
 
     const resolveAttendee = async (data: { action: number, uid: number }) => {
@@ -164,6 +166,7 @@ export const AttendanceModule = () => {
         }
         catch (error) {
             //handle errors
+            console.log(error)
         }
     }
 
@@ -179,7 +182,7 @@ export const AttendanceModule = () => {
                             {status === 0 ?
                                 <>
                                     <button className="bg-green hover:bg-white hover:text-green border border-green ease-in-out duration-300 text-white cursor-pointer px-6 py-2 text-sm rounded uppercase font-medium flex items-center justify-center gap-1"
-                                        onClick={() => resolveAttendee({ action: 9, uid })}>
+                                        onClick={() => resolveAttendee({ action: 1, uid })}>
                                         <span>Confirm</span>
                                         <CheckCheck />
                                     </button>
