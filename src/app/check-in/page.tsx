@@ -5,9 +5,11 @@ import moment from 'moment';
 import { useSession } from "@/context";
 import { toast } from 'react-hot-toast';
 import { apiEndPoint } from "@/utils/colors";
+import { useAudit } from "@/shared/tools/auditMonit";
 
 export default function Checkin() {
     const { user } = useSession();
+    const { addAuditLog } = useAudit();
 
     if (!user) {
         return;
@@ -25,12 +27,12 @@ export default function Checkin() {
         }
 
         try {
+            addAuditLog({ action: `checkin attempt` })
             const url = `checkin/insertcheckin`;
             const response = await axios.post(`${apiEndPoint}/${url}`, payLoad)
 
-            console.log(response)
-            
             if (response?.data?.message === "Success") {
+                addAuditLog({ action: `checkin success` })
                 toast(`Checked in successfully!`,
                     {
                         icon: '👋',
@@ -43,6 +45,7 @@ export default function Checkin() {
                 );
             }
             else {
+                addAuditLog({ action: `checkin failed: Error - ${response?.data}` })
                 toast(`Failed to checkin`,
                     {
                         icon: '❌',
@@ -55,8 +58,8 @@ export default function Checkin() {
                 );
             }
         }
-        catch (error) {
-            console.log(error)
+        catch (error: any) {
+            addAuditLog({ action: `checkin failed: Error - ${error?.message}` })
             toast(`Failed to checkin`,
                 {
                     icon: '❌',

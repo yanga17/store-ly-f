@@ -8,6 +8,7 @@ import { useInputHandler } from '@/hooks';
 import { Eye, EyeOff } from 'lucide-react';
 import { apiEndPoint, colors } from '@/utils/colors';
 import { useForm, Controller } from 'react-hook-form';
+import { useAudit } from '@/shared/tools/auditMonit';
 
 interface FormData {
     username: string;
@@ -16,6 +17,7 @@ interface FormData {
 
 export default function Page() {
     const { login } = useSession()
+    const { addAuditLog } = useAudit()
 
     const [isVisisble, setIsVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -52,16 +54,21 @@ export default function Page() {
                 password: data.password
             }
 
-            const url = `user/login`
+            addAuditLog({ action: `login attempt` })
 
+            const url = `user/login`
             const response = await axios.post(`${apiEndPoint}/${url}`, payLoad)
 
             if (response.data.msg === "Success, Logged in!") {
                 login(response?.data)
                 setIsLoading(false);
+
+                addAuditLog({ action: `login success` })
             }
             else {
                 setIsLoading(false);
+
+                addAuditLog({ action: `login attempt: Error -- ${response.data}` })
 
                 toast('Login failed, please try again', {
                     icon: '❌',
@@ -75,10 +82,12 @@ export default function Page() {
             }
 
         }
-        catch {
+        catch (error: any) {
             setIsLoading(false);
 
-            toast('Login failed, please try again', {
+            addAuditLog({ action: `login attempt: Error -- ${error?.message}` })
+
+            toast(`${error?.message}, please try again`, {
                 icon: '❌',
                 style: {
                     borderRadius: '10px',
@@ -91,7 +100,7 @@ export default function Page() {
     };
 
     return (
-        <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-login bg-cover bg-no-repeat bg-center">
+        <div className="w-full h-screen flex items-center justify-center overflow-hidden bg-login bg-cover bg-no-repeat bg-center"> 
             <div className="w-11/12 md:w-5/12 lg:w-3/12 xl:w-4/12 shadow-lg p-2 md:p-4 flex flex-col justify-start items-center gap-5 rounded bg-white bg-opacity-50 backdrop-blur-md">
                 <div className="flex flex-col items-center justify-center gap-0">
                     <h1 className="leading-none font-medium">Welcome</h1>
@@ -109,7 +118,7 @@ export default function Page() {
                                     {...field}
                                     className="border-grey p-3 w-full border rounded outline-none md:cursor-pointer placeholder:text-sm placeholder:italic"
                                     type="text"
-                                    placeholder="jack@developer.co.za"
+                                    placeholder="LS232DEV"
                                     onChange={(e) => {
                                         handleChange('username', e.target.value);
                                         field.onChange(e);

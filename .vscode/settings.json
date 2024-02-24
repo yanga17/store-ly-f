@@ -15,6 +15,7 @@
         "getproducts",
         "getteamleader",
         "Goul",
+        "insertauditlog",
         "insertcheckin",
         "insertinjection",
         "insertlog",

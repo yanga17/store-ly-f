@@ -6,6 +6,7 @@ import { Check, CheckCheck, X } from "lucide-react";
 import { apiEndPoint, colors } from '@/utils/colors';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useAudit } from '@/shared/tools/auditMonit';
 
 interface CheckProps {
     uid: number,
@@ -20,6 +21,8 @@ interface CheckProps {
 type ResponseType = CheckProps[]
 
 export const AttendanceModule = () => {
+
+    const { addAuditLog } = useAudit()
 
     const url = `checkin/getcheckins`;
     const { data, loading, error } = useQuery<ResponseType>(url);
@@ -145,10 +148,13 @@ export const AttendanceModule = () => {
         const { action, uid } = data
 
         try {
+            addAuditLog({ action: `Resolving attendee: User: ${uid}, action: ${action}` })
+
             const actionsURL = `checkin/updatecheckin`
             const response = await axios.put(`${apiEndPoint}/${actionsURL}/${action}/${uid}`)
 
             if (response?.data?.message === 'Success') {
+                addAuditLog({ action: `Resolved attendee: User: ${uid}, action: ${action}` })
                 toast(`Attendee status resolved successfully`,
                     {
                         icon: '👋',
@@ -161,6 +167,7 @@ export const AttendanceModule = () => {
                 );
             }
             else {
+                addAuditLog({ action: `Failed to resolve attendee: User: ${uid}, action: ${action}, Error: ${response?.data}` })
                 toast(`Failed to resolve attendee status`,
                     {
                         icon: '❌',
@@ -174,6 +181,7 @@ export const AttendanceModule = () => {
             }
         }
         catch (error: any) {
+            addAuditLog({ action: `Failed to resolve attendee: User: ${uid}, action: ${action}, Error: ${error?.message}` })
             toast(`${error?.message}, please re-try`,
                 {
                     icon: '❌',
