@@ -18,6 +18,11 @@ export const Navigation = () => {
 
     const toggleVisibility = () => setIsOpen(!isOpen);
 
+    if (!user) {
+      return;
+    }
+    const { role } = user
+
     return (
       <div className={`lg:hidden flex relative p-4 ${pathname === '/' ? 'bg-white text-black' : 'bg-black text-white'}`}>
         <div className="w-full items-center justify-between flex">
@@ -29,9 +34,12 @@ export const Navigation = () => {
             <div className="text-white bg-black-dark rounded w-11/12 h-1/2 relative">
               <X size={40} strokeWidth={1.5} color={colors?.red} className="cursor-pointer absolute top-2 right-2" onClick={toggleVisibility} />
               <ul className="w-full h-full flex flex-col items-center justify-center gap-4">
-                <li>
-                  <Link href='/'>Home</Link>
-                </li>
+                {
+                  role === 'Admin' &&
+                  <li>
+                    <Link href='/'>Home</Link>
+                  </li>
+                }
                 <li>
                   <Link href='/check-in'>Attend</Link>
                 </li>
