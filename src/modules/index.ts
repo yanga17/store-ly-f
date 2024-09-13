@@ -1,1 +1,1 @@
-export { AttendanceModule } from "./home/attendanceModule";
+export { ProductsModule } from "./home/productsModule";

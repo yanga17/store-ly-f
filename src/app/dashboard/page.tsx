@@ -6,6 +6,7 @@ import { useSession } from "@/context";
 import { toast } from 'react-hot-toast';
 import { apiEndPoint } from "@/utils/colors";
 import { useAudit } from "@/shared/tools/auditMonit";
+import Image from "next/image";
 
 export default function Checkin() {
     const { user } = useSession();
@@ -75,8 +76,8 @@ export default function Checkin() {
     }
 
     return (
-        <section className="w-full h-full flex flex-col items-center justify-center gap-2 bg-black">
-            <button className="bg-green text-white px-10 py-4 lg:py-10 rounded uppercase" onClick={checkinUser}>Check In Now</button>
-        </section>
+        <div className="w-full h-full flex justify-between px-4 py-4 gap-2 bg-white rounded-lg">
+            <div>DASHBOARD</div>
+        </div>
     );
 }
