@@ -4,11 +4,12 @@ import axios from 'axios';
 import { useQuery } from "@/hooks/useQuery";
 import { apiEndPoint, colors } from '@/utils/colors';
 import { toast } from 'react-hot-toast';
+import { useState, useEffect } from 'react';
 import MultiColorLoader from '@/lib/loaders';
-import Image from 'next/image';
 import { LoyaltyModule } from './loyaltyModule';
 import { ProductsManModule } from './productsManModule';
-import { useState, useEffect } from 'react';
+import { StoreModule } from './storeModule';
+import { ReviewsModule } from './reviewsModule';
 
 
 export const AdminModule = () => {
@@ -20,9 +21,11 @@ export const AdminModule = () => {
             <div className='w-full p-2 sm:flex justify-start md:gap-2 flex-wrap md:flex justify-start md:gap-4 flex-wrap lg:flex items-center'>
                 <button onClick={() => setCurrentTab('products')} className='bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none'>Product Management</button>
                 <button onClick={() => setCurrentTab('loyalty')} className='bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none'>Loyalty Management</button>
+                <button onClick={() => setCurrentTab('reviews')} className='bg-black whitespace-nowrap w-10 lg:ease-in-out duration-500 shadow rounded text-sm p-2 cursor-pointer text-white font-medium hover:text-white hover:bg-red lg:ease-in-out duration-300 w-44 outline-none'>Customer Reviews</button>
             </div>
             {currentTab === 'loyalty' && <LoyaltyModule />}
             {currentTab === 'products' && <ProductsManModule />}
+            {currentTab === 'reviews' && <ReviewsModule />}
         </div>
     );
 }
