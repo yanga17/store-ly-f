@@ -71,7 +71,7 @@ export const ProductsModule = () => {
              />
              <div className="pr-2 pt-2">
              <DropdownMenu>
-                 <DropdownMenuTrigger className="w-20 bg-black rounded text-white py-2 hover:bg-slate-600">Open</DropdownMenuTrigger>
+                 <DropdownMenuTrigger className="w-20 bg-black rounded text-white py-2 hover:bg-red">Open</DropdownMenuTrigger>
                  <DropdownMenuContent>
                      <DropdownMenuLabel>Categories</DropdownMenuLabel>
                      <DropdownMenuSeparator />

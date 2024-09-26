@@ -7,7 +7,12 @@ import MultiColorLoader from '@/lib/loaders';
 import { useState, useEffect } from 'react';
 import { format } from "date-fns";
 import toast from 'react-hot-toast';
-import { XIcon, Check, Percent, Gem } from "lucide-react";
+import { XIcon, Check, Percent, Gem, X } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
 
 interface ProductProps {
     idx: number,
@@ -42,239 +47,503 @@ interface ProductProps {
 
 type ProductResponse = ProductProps[]
 
+//setProductDiscountProps
+interface DiscountProps {
+    DiscountID: number,
+    ProductID: number,
+    DiscountName: string,
+    StartDate: string,
+    EndDate: string,
+    DiscountType: string,
+    DiscountValue: number,
+    DiscountTier: string,
+    MinimumSpending: number,
+    UsageCount: number
+}
+type DiscountResponse = DiscountProps[]
+
+//setProductDiscountProps
+interface SpecialProps {
+    productID: number,
+    productCategory: string,
+    special: string,
+    specialType: string,
+    startDate: string,
+    expiryDate: string
+}
+type SpecialResponse = SpecialProps[]
+
+
+//getAllProductsOnSpecial
+interface GetSpecialsProps {
+    ProductID: number,
+    SpecialName: string,
+    SpecialValue: number,
+    StartDate: string,
+    ExpiryDate: string,
+    IsActive: number,
+    ProductName: string,
+    Price: number
+}
+type GetSpecialsResponse = GetSpecialsProps[]
+
+
+//getAllProductsOnDiscounts
+interface GetDiscountsProps {
+    ProductID: number,
+    DiscountName: string,
+    StartDate: string,
+    EndDate: string,
+    DiscountValue: number,
+    DiscountTier: string,
+    ProductName: string,
+    Price: number
+}
+type GetDiscountsResponse = GetDiscountsProps[]
+
 
 export const ProductsManModule = () => {
-    const [productDescription, setProductDescription] = useState('');
-    const [discount, setDiscount] = useState('');
-    const [discountExpiry, setDiscountExpiry] = useState('');
+    const [discountIdx, setDiscountProductIdx] = useState<number | null>(null); // Store product idx for discount
+    const [discountName, setDiscountName] = useState('');
+    const [discountValue, setDiscountValue] = useState(0);
+    const [discountTier, setDiscountTier] = useState('');
+    const [discountStartDate, setDiscountStartDate] = useState('');
+    const [discountExpDate, setDiscountExpDate] = useState(''); 
+    const [allDiscountedProducts, setProductDiscounts] = useState<GetDiscountsResponse>([]);
 
+    const [specialId, setSpecialProductId] = useState<number | null>(null); // Store product idx for special
     const [special, setSpecial] = useState('');
-    const [specialExpiry, setSpecialExpiry] = useState('');
+    const [specialProdCategory, setSpecialProdCategory] = useState('');
+    const [specialType, setSpecialType] = useState('');
+    const [specialValue, setSpecialValue] = useState(0);
+    const [specialStartDate, setSpecialStartDate] = useState('');
+    const [specialExpDate, setSpecialExpDate] = useState('');
+    const [allSpecialProducts, setProductSpecials] = useState<GetSpecialsResponse>([]);
 
-    const [selectedDisidx, setSelectedDisidx] = useState<number | null>(null); // Track selected product index
-    const [selectedSpecidx, setSelectedSpecidx] = useState<number | null>(null); // Track selected product index
-
+    const discountOptions = [
+        {discount: 'Anniversary Discount'},
+        {discount: 'August Season Discount'}, 
+        {discount: 'Back to School Discount'}, 
+        {discount: 'Early Bird Special'}, 
+        {discount: 'Holiday Special'}, 
+        {discount: 'Limited Time Offer'}, 
+        {discount: 'New Years Promotion'}, 
+        {discount: 'Product Discount'}, 
+        {discount: 'Product Review Reward Discount'}, 
+        {discount: 'Referral Reward Discount'}, 
+        {discount: 'Spring Season Discount'}, 
+        {discount: 'Summer Season Discount'}, 
+        {discount: 'Survey Reward Discount'}, 
+        {discount: 'Weekend Deal'}, 
+        {discount: 'Winter Season Discount'}
+    ];
 
     const url = `products/getproducts`;
     const { data, loading, error } = useQuery<ProductResponse>(url);
 
-    if (loading) {
-        return (
-            <MultiColorLoader />
-        )
-    }
 
-    if (error) {
-        return (
-            <div>AN ERROR OCCURED!!</div>
-        )
-    }
-
-    // 2. Updated function to use selectedIdx, which is the index of the selected product
-    const setProductDiscount = async (idx: any) => {
-        if (selectedDisidx === null) return; // Check if idx is selected
-        const newDiscountExp = new Date(discountExpiry);
-        console.log("selected product discount index:", selectedDisidx);
-
-        try {
-            const url = `products/setproductdisc/${discount}/${newDiscountExp}/${selectedDisidx}`;
-            const response = await axios.patch<ProductResponse>(`${apiEndPoint}/${url}`);
-            console.log("The Products Discount has been set successfully", response)
-
-            toast.success('The product discount has been set.', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
+    const getProductSpecials = async () => {
+        try{
+            //http://localhost:4200/products/getproductspecials
+            const url = `products/getproductspecials`
+            const response = await axios.get<GetSpecialsResponse>(`${apiEndPoint}/${url}`)
+            setProductSpecials(response?.data)
+            console.log("RETRIEVED ALL PRODUCT SPECIALS:", response)
 
         } catch (error) {
-            console.log("AN error occured when setting the product discount")
-
-            toast.error('There was an error setting the product discount', {
-                icon: <XIcon color={colors.red} size={24} />,
-                duration: 3000,
-            });
+            console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
         }
     }
 
-    // 3. Updated function to use selectedIdx, similar to the discount function above
-    const setProductSpecial = async (idx: any) => {
-        if (selectedSpecidx === null) return; // Check if idx is selected
-        const newSpecialExp = new Date(specialExpiry);
-        console.log("selected product special index:", selectedSpecidx);
-
-        try {
-            const url = `products/setproductspecial/${special}/${newSpecialExp}/${selectedSpecidx}`;
-            const response = await axios.patch<ProductResponse>(`${apiEndPoint}/${url}`);
-            console.log("The Products Discount has been set successfully", response)
-
-            toast.success('The product special has been set.', {
-                icon: <Check color={colors.green} size={24} />,
-                duration: 3000,
-            });
+    const getProductDiscounts = async () => {
+        try{
+            //http://localhost:4200/products/getproductdiscounts
+            const url = `products/getproductdiscounts`
+            const response = await axios.get<GetDiscountsResponse>(`${apiEndPoint}/${url}`)
+            setProductDiscounts(response?.data)
+            console.log("RETRIEVED ALL PRODUCT SPECIALS:", response)
 
         } catch (error) {
-            console.log("An error occured when setting the product discount")
+            console.log("AN ERROR OCCURED WHEN FETCHING PRODUCT SPECIALS:", error)
+        }
+    }
 
-            toast.error('There was an error setting the product special', {
-                icon: <XIcon color={colors.red} size={24} />,
+    const setproductDiscount = async () => {
+        if (discountIdx === null) {
+            console.error('No product selected for discount');
+            toast.error('No product selected for discount', {
+                icon: <X color={colors.red} size={24} />,
                 duration: 3000,
             });
         }
+
+        try{
+            //http://localhost:4200/products/setproductdiscounts
+            const newStartDate = new Date(discountStartDate);
+            const newExpDate = new Date(discountExpDate);
+            console.log("new discount start date:", newStartDate)
+            console.log("new discount expiry date:", newExpDate)
+
+            const payload = {
+                productID: discountIdx,
+                discountName: discountName,
+                discountValue: discountValue,
+                discountTier: discountTier,
+                startDate: newStartDate,
+                endDate: newExpDate
+            }
+
+            const url = `products/setproductdiscount`
+            const response = await axios.post<ProductResponse>(`${apiEndPoint}/${url}`, payload)
+            console.log("The product discount has been set successfully", response.data)
+            
+            // Only show success notification if response is successful
+            if (response.status === 200) {
+                discountSuccessNotification();
+            } else {
+                console.error('Failed to set product special:', response);
+                discountErrorNotification();
+            }
+        } catch (error) {
+            console.log("An error was encountered when setting product discounts", error)
+            discountErrorNotification();
+        }
     }
+
+    const setproductSpecial = async () => {
+        if (specialId === null) {
+            console.error('No product selected for special');
+            toast.error('No product selected for special', {
+                icon: <X color={colors.red} size={24} />,
+                duration: 3000,
+            });
+        }
+
+        try{
+            //http://localhost:4200/products/setproductspecial - new route
+            const newStartDate = new Date(specialStartDate);
+            const newExpDate = new Date(specialExpDate);
+
+            const payload = {
+                productID: specialId,
+                productCategory: specialProdCategory,
+                special: special,
+                specialType: specialType,
+                startDate: newStartDate,
+                expiryDate: newExpDate
+            }
+
+            const url = `products/setproductspecial`
+            const response = await axios.post<SpecialResponse>(`${apiEndPoint}/${url}`, payload)
+            console.log("The product special has been set successfully", response.data)
+
+            // Only show success notification if response is successful
+            if (response.status === 200) {
+                specialSuccessNotification();
+            } else {
+                console.error('Failed to set product special:', response);
+                specialErrorNotification();
+            }
+            
+        } catch (error) {
+            console.log("An error was encountered when setting product special", error)
+            specialErrorNotification();
+        }
+    }
+
+    const specialSuccessNotification = () => {
+        toast.success('The product special has been set', {
+            icon: <Check color={colors.green} size={24} />,
+            duration: 3000,
+        });
+    };
+
+    const discountSuccessNotification = () => {
+        toast.success('The product discount has been set', {
+            icon: <Check color={colors.green} size={24} />,
+            duration: 3000,
+        });
+    };
+
+    const specialErrorNotification = () => {
+        toast.error('The product special has NOT been set', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+    };
+
+    const discountErrorNotification = () => {
+        toast.error('The product discount has NOT been set', {
+            icon: <X color={colors.red} size={24} />,
+            duration: 3000,
+        });
+    };
+
+    useEffect(() => {
+        getProductSpecials();
+        getProductDiscounts();
+    }, []);
 
 
     return (
-        <div className='w-full h-screen overflow-y-auto mb-4 pr-4'>
-            <div className='overflow-y-auto'>
-                <div className='bg-white rounded-lg p-4'>
-                    <h3>Products Management</h3>
-                    <p className='text-gray-500'>Manage your products and categories here. Set discounts and manage specials</p>
-                    <div className='flex gap-4 pt-6'>
-                        <div className='w-full'>
-                            <label>Product</label>
-                            <div className='flex flex-col gap-2'>
-                                <div className='flex gap-2'>
-                                    <select 
-                                        className="w-full p-2 rounded-lg border border-gray-300 cursor-pointer"
-                                        onChange={(e) => {
-                                            const selectedProduct = data?.find(product => product.Product_Description === e.target.value);
-                                            if (selectedProduct) {
-                                                setDiscount(e.target.value);
-                                                setSelectedDisidx(selectedProduct.idx); // Update selected product index
-                                            }
-                                        }}
-                                    >
-                                        <option className="">Select Product</option>
-                                        {data?.map(({ idx, Product_Description }) =>
-                                            <option key={idx} value={Product_Description}>{Product_Description}</option>
-                                        )}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='w-full'>
-                            <label>Discount (%)</label>
-                            <div className='flex flex-col gap-2'>
-                                <div className='flex gap-2'>
-                                    <input onChange={(e) => setDiscount(e.target.value)} type="text" placeholder='5%' className='w-full p-2 rounded-lg border border-gray-300 cursor-pointer' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='w-full'>
-                            <label>Discount Expiry</label>
-                            <div className='flex flex-col gap-2'>
-                                <div className='flex gap-2'>
-                                <input 
-                                    type="date" 
-                                    className='w-full p-2 rounded-lg border border-gray-300 cursor-pointer'
-                                    onChange={(e) => setDiscountExpiry(e.target.value)}
-                                />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex gap-4 pt-6'>
-                        <div className='w-full'>
-                            <label>Product</label>
-                            <div className='flex flex-col gap-2'>
-                                <div className='flex gap-2'>
-                                    <select 
-                                        className="w-full p-2 rounded-lg border border-gray-300 cursor-pointer"
-                                        onChange={(e) => {
-                                            const selectedProduct = data?.find(product => product.Product_Description === e.target.value);
-                                            if (selectedProduct) {
-                                                setSpecial(e.target.value);
-                                                setSelectedSpecidx(selectedProduct.idx); // Update selected product index
-                                            }
-                                        }}
-                                    >
-                                        <option className="dash-text">Select Product</option>
-                                        {data?.map(({ idx, Product_Description }) =>
-                                            <option key={idx} value={Product_Description}>{Product_Description}</option>
-                                        )}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='w-full'>
-                            <label>Special</label>
-                            <div className='flex flex-col gap-2'>
-                                <div className='flex gap-2'>
-                                    <input onChange={(e) => setSpecial(e.target.value)} type="text" placeholder='buy 2 get 50% off next purchase' className='w-full p-2 rounded-lg border border-gray-300 cursor-pointer' />
-                                </div>
-                            </div>
-                        </div>
-                        <div className='w-full'>
-                            <label>Special Expiry</label>
-                            <div className='flex flex-col gap-2'>
-                                <div className='flex gap-2'>
-                                    <input
-                                        type="date" 
-                                        className='w-full p-2 rounded-lg border border-gray-300 cursor-pointer'
-                                        onChange={(e) => setSpecialExpiry(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex gap-2 pt-4'>
-                        <button onClick={() => setProductDiscount } className='bg-black text-white p-2 w-40 rounded-lg hover:bg-red'>
-                            Add Discount
-                        </button>
-                        <button onClick={() => setProductSpecial } className='bg-black text-white p-2 w-40 rounded-lg hover:bg-red'>
-                            Add Special
-                        </button>
-                    </div>
-                </div>
-                <div className='pt-4 pb-24'>
-                    <div className='bg-white rounded-lg p-4 pt-4'>
-                        <h3>Edit Products Discounts/Specials</h3>
-                        <p className='text-gray-500'>Manage your products and categories here. Add new products, set discounts and manage specials</p>
-                        
-                        <div className='pt-6'>
-                            <table className='w-full table-fixed p-4'>
-                                <thead className='table-headerup'>
-                                    <tr className='bg-gray text-left h-10 p-2 text-md sm:text-sm md:text-md font-medium border-rounded rounded-full'>
-                                        <th className='p-2 w-[30px]'>ID</th>
-                                        <th className='p-2 w-[180px]'>Name</th>
-                                        <th className='p-2 w-[100px]'>Category</th>
-                                        <th className='p-2 w-[70px]'>Discount</th>
-                                        <th className='p-2 w-[120px]'>Discount Expiry</th>
-                                        <th className='p-2 w-[100px]'>Special</th>
-                                        <th className='p-2 w-[120px]'>Special Expiry</th>
-                                        <th className='p-2 w-[60px]'>Action</th>
-                                    </tr>
-                                </thead>
-                                {data?.map(product => (
-                                    <tbody key={product.idx} className="mb-4">
-                                        <tr className='border-b'>
-                                            <td className='p-2'>{product.idx}</td>
-                                            <td className='p-2'>{product.Product_Description}</td>
-                                            <td className='p-2'>{product.Category}</td>
-                                            <td className='p-2'>{product.VatPerc}%</td>
-                                            <td className='p-2'>
-                                                {product.Discount_Expiry ? `${new Date(product.Discount_Expiry).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
-                                            </td>
-                                            <td className='p-2'>{product.Special || '--:--'}</td>
-                                            <td className='p-2'>
-                                                {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
-                                            </td>
-                                            <td className='flex gap-2 py-2 px-2'>
-                                                <button className='bg-black text-white p-3 w-20 rounded-lg hover:bg-red'>
-                                                    <Percent size={22} />
-                                                </button>
-                                                <button className='bg-black text-white p-3 w-20 rounded-lg hover:bg-red'>
-                                                    <Gem size={22} />
-                                                </button>
-                                            </td>
+        <div className='w-full h-screen overflow-y-auto mb-4 pr-4 space-y-6'>
+            <div className='bg-white w-full rounded-lg p-4 shadow-dark'>
+                        <h3>Discounts</h3>
+                        <p className='text-gray-500'>Reward customers with discounts for completing actions.</p>
+                        <div className='w-full flex justify-start gap-4 pt-8 pb-2 border-b'>
+                                <table className='w-full table-fixed p-4'>
+                                    <thead>
+                                        <tr className='text-left h-10 p-2 text-md sm:text-sm font-medium'>
+                                            <th className='p-2 w-[40px]'>ID</th>
+                                            <th className='p-2 w-[100px]'>Product Name</th>
+                                            <th className='p-2 w-[80px]'>Discount Price</th>
+                                            <th className='p-2 w-[180px]'>Start Date</th>
+                                            <th className='p-2 w-[180px]'>End Date</th>
+                                            <th className='p-2 w-[70px]'>Tier</th>
+                                            <th className='p-2 w-[70px]'>Active/Inactive</th>
+                                            <th className='p-2 w-[70px]'>Action</th>
                                         </tr>
-                                    </tbody>
-                                ))}
-                            </table>
+                                    </thead>
+                                        <tbody className="mb-2">
+                                            <tr className=''>
+                                                <td className='p-2'>15</td>
+                                                <td className='p-2'>Cheese Burger</td>
+                                                <td className='p-2'>R20</td>
+                                                <td className='p-2'>
+                                                    {/* {product.Discount_Expiry ? `${new Date(product.Discount_Expiry).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
+                                                    Tue Oct 01 2024 00:00:00 GMT+02:00
+                                                </td>
+                                                <td className='p-2'>
+                                                    {/* {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
+                                                    Thu Oct 31 2024 00:00:00 GMT+02:00
+                                                </td>
+                                                <td className='p-2'>Alpha</td>
+                                                <td className='p-2 pl-8'>
+                                                    <Check size={24} color="green"/>
+                                                </td>
+                                                <td className='p-2'>
+                                                    <button className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                                        Edit
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                </table>
+                        </div>
+                        <div className='flex gap-2 pt-4'>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Discount</Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <DialogHeader>
+                                <DialogTitle>Set New Discount</DialogTitle>
+                                <DialogDescription>
+                                    Select the product and set the discount. Click save once completed.
+                                </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                    <div className="">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Product
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                            onChange={(e) => setDiscountProductIdx(Number(e.target.value))} // Store the selected product idx
+                                        >
+                                                <option value="" className="dash-text">Select Product</option>
+                                                {data?.map(({ idx, Product_Description }) =>
+                                                    <option key={idx} value={idx}>{Product_Description}</option> //store idx instead of product description
+                                                )}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Discount:
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                            onChange={(e) => setDiscountName(e.target.value)}
+                                        >
+                                                <option value="" className="dash-text">Select Product Category</option>
+                                                {discountOptions.map((option, index) => (
+                                                    <option key={index} value={option.discount}>{option.discount}</option>
+                                                ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Discount Amount:
+                                        </Label>
+                                        <input type="input" placeholder="10" onChange={(e) => setDiscountValue(Number(e.target.value))} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Discount Tier:
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                            onChange={(e) => setDiscountTier(e.target.value)}
+                                        >
+                                                <option>Select Tier</option>
+                                                    <option value="All">All</option>
+                                                    <option value="Omega">Omega</option>
+                                                    <option value="Beta">Beta</option>
+                                                    <option value="Alpha">Alpha</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="username" className="text-left pt-4">
+                                            Start Date:
+                                        </Label>
+                                        <input type="date" onChange={(e) => setDiscountStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="username" className="text-left pt-4">
+                                            Expiry Date:
+                                        </Label>
+                                        <input type="date" onChange={(e) => setDiscountExpDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                </div>
+                                <DialogFooter>
+                                    <button onClick={ setproductDiscount } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                        Save
+                                    </button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                         </div>
                     </div>
-                </div>
-            </div>
+                    <div className='bg-white w-full rounded-lg p-4 pt-4 shadow-dark'>
+                        <h3>Specials</h3>
+                        <p className='text-gray-500'>Reward customers with specials for completing actions.</p>
+                        <div className='w-full flex justify-start gap-4 pt-8 pb-2 border-b'>
+                            <table className='w-full table-fixed p-4'>
+                                    <thead>
+                                        <tr className='text-left h-10 p-2 text-md sm:text-sm font-medium'>
+                                            <th className='p-2 w-[40px]'>ID</th>
+                                            <th className='p-2 w-[100px]'>Product</th>
+                                            <th className='p-2 w-[80px]'>Special</th>
+                                            <th className='p-2 w-[80px]'>Special Type</th>
+                                            <th className='p-2 w-[180px]'>Start Date</th>
+                                            <th className='p-2 w-[180px]'>Expiry Date</th>
+                                            <th className='p-2 w-[70px]'>Action</th>
+                                        </tr>
+                                    </thead>
+                                        <tbody className="mb-2">
+                                            <tr className=''>
+                                                <td className='p-2'>18</td>
+                                                <td className='p-2'>SWITCH 400ML</td>
+                                                <td className='p-2'>Buy 2 get 1 free</td>
+                                                <td className='p-2'>
+                                                    Combined Special
+                                                </td>
+                                                <td className='p-2'>
+                                                    {/* {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
+                                                    Thu Oct 31 2024 00:00:00 GMT+02:00
+                                                </td>
+                                                <td className='p-2'>
+                                                    {/* {product.Special_ExpiryDate ? `${new Date(product.Special_ExpiryDate).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'} */}
+                                                    Thu Oct 31 2024 00:00:00 GMT+02:00
+                                                </td>
+                                                <td className='p-2'>
+                                                    <button className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                                        Edit
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                </table>
+                        </div>
+                        <div className='flex gap-2 pt-4'>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button className="bg-black text-white p-2 w-40 rounded-lg hover:bg-red">Add Special</Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <DialogHeader>
+                                <DialogTitle>Add New Special</DialogTitle>
+                                <DialogDescription>
+                                    Select the product and determine the special. Click save when you're done.
+                                </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                    <div className="">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Product
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                            onChange={(e) => setSpecialProductId(Number(e.target.value))} // Store the selected product idx
+                                        >
+                                                <option value="" className="dash-text">Select Product</option>
+                                                {data?.map(({ idx, Product_Description }) =>
+                                                    <option key={idx} value={idx}>{Product_Description}</option> //store idx instead of product description
+                                                )}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Product Category:
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                            onChange={(e) => setSpecialProdCategory(e.target.value)}
+                                        >
+                                                <option>Select Tier</option>
+                                                    <option value="All">All</option>
+                                                    <option value="Drinks">Drinks</option>
+                                                    <option value="Meat">Meat</option>
+                                                    <option value="Other">Other</option>
+                                                    <option value="Poultry">Poultry</option>
+                                                    <option value="Processed Meats">Processed Meats</option>
+                                                    <option value="Snacks">Snacks</option>
+                                                    <option value="Staples/Grains">Staples/Grains</option>
+                                                    <option value="Toiletries">Toiletries</option>
+                                        </select>
+                                    </div>
+                                    <div className="">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Special:
+                                        </Label>
+                                        <input type="input" placeholder="buy 2 and get 20% off next purchase" onChange={(e) => setSpecial(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                    <div className="">
+                                        <Label htmlFor="name" className="text-left pt-4">
+                                            Special Category:
+                                        </Label>
+                                        <select 
+                                            className="w-full p-2 rounded-lg border border-gray-300"
+                                            onChange={(e) => setSpecialType(e.target.value)}
+                                        >
+                                                <option>Select Tier</option>
+                                                    <option value="Case Group">Case Group</option>
+                                                    <option value="Combined Special">Combined Special</option>
+                                                    <option value="Combo Special">Combo Special</option>
+                                        </select>
+                                    </div>
+                                    <div className="">
+                                        <Label htmlFor="username" className="text-left pt-4">
+                                            Start Date:
+                                        </Label>
+                                        <input type="date" onChange={(e) => setSpecialStartDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                    <div className="">
+                                        <Label htmlFor="username" className="text-left pt-4">
+                                            Expiry Date:
+                                        </Label>
+                                        <input type="date" onChange={(e) => setSpecialExpDate(e.target.value)} className='w-full p-2 rounded-lg border border-gray-300'/>
+                                    </div>
+                                </div>
+                                <DialogFooter>
+                                    <button onClick={ setproductSpecial } className="bg-black text-white p-2 w-full rounded-lg hover:bg-red">
+                                        Save
+                                    </button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+                        </div>
+                    </div>
         </div>
     );
 }
