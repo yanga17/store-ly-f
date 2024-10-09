@@ -15,7 +15,7 @@ export function SurveyDialog() {
                     <DialogHeader>
                         <DialogTitle>Add New Rule</DialogTitle>
                             <DialogDescription>
-                                Allow your customers to earn points for completing reviews on products and store.
+                                Allow your customers to earn points for completing surveys on products and store.
                             </DialogDescription>
                     </DialogHeader>
                         <div className='flex justify-evenly gap-4 pb-2 border-b pt-4'>
