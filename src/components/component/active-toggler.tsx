@@ -3,9 +3,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 
-
-
-export const ActiveToggler = () => {
+export function ActiveToggler() {
 
     return (
         <label className="switch">

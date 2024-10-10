@@ -7,8 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from 'react-hot-toast';
 import { useQuery } from "@/hooks/useQuery";
 import * as React from "react";
-import {useState, useEffect, createContext } from 'react';
-import { apiEndPoint, colors } from '@/utils/colors';
+import {useState, useEffect } from 'react';
 import axios from 'axios';
 
 interface ReviewProps {
@@ -22,7 +21,6 @@ interface ReviewProps {
 }
 
 type ReviewResponse = ReviewProps[]
-
 
 const reviews = [
   {
@@ -79,88 +77,53 @@ const reviews = [
     date: "Thur Aug 01 2024 00:00:00 GMT+02:00",
     comment: "The fish and chips were outstanding! The fish was perfectly cooked with a crispy batter, and the chips were golden and crunchy. Definitely recommend!"
   }
-]
+];
 
 export const ReviewsModule = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [empty, setEmpty] = useState(false);
-  const [productData, setProductData] = useState<ReviewResponse>([]);
-
-  const getReviews = async () => {
-    try {
-      setLoading(true);
-      const url = `admin/getproductreviews`;
-      const response = await axios.get<ReviewResponse>(`${apiEndPoint}/${url}`);
-      setProductData(response.data);
-      console.log("Customer Product Views have returned:", response.data);
-
-      if (response.data.length === 0) {
-        setEmpty(true);
-      }
-    } catch (error) {
-      console.log("There was an error fetching the product reviews", error);
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getReviews();
-  }, []);
 
   return (
     <div className="min-h-screen overflow-y-auto">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-4">Customer Product Reviews</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {productData?.map(({ id, client_name, client_image, product, rating, date, comment }) => {
-            // Convert the LONGBLOB (client_image) to base64 string
-            const avatar = client_image ? Buffer.from(client_image).toString('base64') : null;
-
-            return (
-              <Card key={id} className="flex flex-col">
-                <CardHeader className="flex flex-row items-center gap-4">
-                  {avatar ? (
-                    <Avatar>
-                      <AvatarImage
-                        src={`data:image/png;base64,${avatar}`}
-                        alt={client_name}
-                        width={40}
-                        height={40}
-                        className="rounded-full"
+          
+          {/* Manually creating six cards */}
+          {reviews.map((review) => (
+            <Card key={review.id} className="flex flex-col">
+              <CardHeader className="flex flex-row items-center gap-4">
+                <Avatar>
+                  <AvatarImage
+                    src={review.avatar}
+                    alt={review.name}
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                </Avatar>
+                <div className="flex flex-col">
+                  <CardTitle className="text-lg">{review.name}</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(review.date).toDateString()}
+                  </p>
+                </div>
+              </CardHeader>
+              <CardContent className="flex-grow flex flex-col">
+                <div className="flex justify-between items-center mb-2">
+                  <Badge variant="secondary">{review.product}</Badge>
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${i < review.rating ? "text-yellow fill-yellow" : "text-gray-300"}`}
                       />
-                    </Avatar>
-                  ) : (
-                    <Avatar>
-                      <AvatarFallback><User /></AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div className="flex flex-col">
-                    <CardTitle className="text-lg">{client_name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {date ? `${new Date(date).toString().split(' ').slice(1, 5).join(' ')}` : '--:--'}
-                    </p>
+                    ))}
                   </div>
-                </CardHeader>
-                <CardContent className="flex-grow flex flex-col">
-                  <div className="flex justify-between items-center mb-2">
-                    <Badge variant="secondary">{product}</Badge>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${i < rating ? "text-yellow fill-yellow" : "text-gray-300"}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-sm flex-grow">{comment}</p>
-                </CardContent>
-              </Card>
-            );
-          })}
+                </div>
+                <p className="text-sm flex-grow">{review.comment}</p>
+              </CardContent>
+            </Card>
+          ))}
+
         </div>
       </div>
     </div>
